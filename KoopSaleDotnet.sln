@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KoopSatis", "KoopSatis.csproj", "{492A133C-1BAF-E526-1197-01167F0B8F40}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{492A133C-1BAF-E526-1197-01167F0B8F40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{492A133C-1BAF-E526-1197-01167F0B8F40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{492A133C-1BAF-E526-1197-01167F0B8F40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{492A133C-1BAF-E526-1197-01167F0B8F40}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BA7D284F-3539-42BE-BBC1-F1C94F6CAE94}
+	EndGlobalSection
+EndGlobal

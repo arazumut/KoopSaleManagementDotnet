@@ -1,0 +1,65 @@
+@model KoopSatis.Models.Product.ProductCategory
+
+@{
+    ViewData["Title"] = "Kategori Sil";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-danger text-white">
+            <h2>@ViewData["Title"]: @Model.Name</h2>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <i class="bi bi-exclamation-triangle-fill"></i> Bu kategoriyi silmek istediğinizden emin misiniz?
+            </div>
+            
+            <dl class="row">
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Name)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+                <dd class="col-sm-9">
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.IsActive)
+                </dt>
+                <dd class="col-sm-9">
+                    @if (Model.IsActive)
+                    {
+                        <span class="badge text-bg-success">Aktif</span>
+                    }
+                    else
+                    {
+                        <span class="badge text-bg-danger">Pasif</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Html.DisplayNameFor(model => model.CreatedAt)
+                </dt>
+                <dd class="col-sm-9">
+                    @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                </dd>
+            </dl>
+            
+            <form asp-action="Delete" class="mt-4">
+                <input type="hidden" asp-for="Id" />
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Vazgeç
+                </a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash"></i> Sil
+                </button>
+            </form>
+        </div>
+    </div>
+</div> 

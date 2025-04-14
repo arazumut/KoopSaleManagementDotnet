@@ -1,0 +1,98 @@
+﻿@{
+    ViewData["Title"] = "Anasayfa";
+}
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h2><i class="bi bi-house-door"></i> Kooperatif Satış ve Stok Takip Sistemi</h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="alert alert-info">
+                            <h4><i class="bi bi-info-circle"></i> Sistem Hakkında</h4>
+                            <p>
+                                Bu sistem, kooperatifler için ürün satışı ve stok takibi yapabilmenizi sağlar.
+                                Kullanıcı yönetimi, ürün yönetimi, stok takibi, satış yönetimi, müşteri yönetimi,
+                                tedarikçi yönetimi ve raporlama özellikleri içerir.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-warning">
+                            <h4><i class="bi bi-lightbulb"></i> Hızlı Başlangıç</h4>
+                            <p>Sistemi kullanmaya başlamak için aşağıdaki adımları izleyebilirsiniz:</p>
+                            <ol>
+                                <li>Ürün kategorileri oluşturun</li>
+                                <li>Ürünleri ekleyin</li>
+                                <li>Stok bilgilerini girin</li>
+                                <li>Müşterileri ekleyin</li>
+                                <li>Satış işlemlerine başlayın</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card border-primary shadow h-100">
+            <div class="card-header bg-primary text-white">
+                <h5><i class="bi bi-boxes"></i> Ürün Yönetimi</h5>
+            </div>
+            <div class="card-body">
+                <p>Ürünleri ve kategorileri yönetin, fiyatları güncelleyin.</p>
+                <a asp-controller="Product" asp-action="Index" class="btn btn-primary btn-sm">
+                    <i class="bi bi-arrow-right"></i> Ürünlere Git
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card border-success shadow h-100">
+            <div class="card-header bg-success text-white">
+                <h5><i class="bi bi-people"></i> Kullanıcı Yönetimi</h5>
+            </div>
+            <div class="card-body">
+                <p>Kullanıcıları yönetin, roller atayın ve izinleri düzenleyin.</p>
+                <a asp-controller="Account" asp-action="UserList" class="btn btn-success btn-sm">
+                    <i class="bi bi-arrow-right"></i> Kullanıcılara Git
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card border-info shadow h-100">
+            <div class="card-header bg-info text-white">
+                <h5><i class="bi bi-tags"></i> Kategori Yönetimi</h5>
+            </div>
+            <div class="card-body">
+                <p>Ürün kategorilerini oluşturun ve düzenleyin.</p>
+                <a asp-controller="ProductCategory" asp-action="Index" class="btn btn-info btn-sm">
+                    <i class="bi bi-arrow-right"></i> Kategorilere Git
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-3 col-md-6 mb-4">
+        <div class="card border-danger shadow h-100">
+            <div class="card-header bg-danger text-white">
+                <h5><i class="bi bi-gear"></i> Ayarlar</h5>
+            </div>
+            <div class="card-body">
+                <p>Sistem ayarlarını yapılandırın ve yönetin.</p>
+                <a href="#" class="btn btn-danger btn-sm">
+                    <i class="bi bi-arrow-right"></i> Ayarlara Git
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

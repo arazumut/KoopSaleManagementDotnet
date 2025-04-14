@@ -1,0 +1,37 @@
+@using Microsoft.AspNetCore.Identity
+@using KoopSatis.Models.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<ul class="navbar-nav">
+@if (SignInManager.IsSignedIn(User))
+{
+    var user = await UserManager.GetUserAsync(User);
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle"></i> @(user != null ? $"{user.FirstName} {user.LastName}" : User.Identity.Name)
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li class="dropdown-item">
+                <i class="bi bi-person"></i> @(user != null ? $"{user.FirstName} {user.LastName}" : User.Identity.Name)
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form class="form-inline" asp-controller="Account" asp-action="Logout">
+                    <button type="submit" class="dropdown-item">
+                        <i class="bi bi-box-arrow-right"></i> Çıkış Yap
+                    </button>
+                </form>
+            </li>
+        </ul>
+    </li>
+}
+else
+{
+    <li class="nav-item">
+        <a class="nav-link text-white" asp-controller="Account" asp-action="Login">
+            <i class="bi bi-box-arrow-in-right"></i> Giriş Yap
+        </a>
+    </li>
+}
+</ul> 
