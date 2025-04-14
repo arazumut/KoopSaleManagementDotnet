@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KoopSatis")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ee9d1066b52585b6495322e11c6ef3fe9ed6694b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+da7920085aa3bddc750d5749296ef09d7e66eba7")]
 [assembly: System.Reflection.AssemblyProductAttribute("KoopSatis")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KoopSatis")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
