@@ -1,91 +1,128 @@
 @model KoopSatis.Controllers.RegisterViewModel
 @{
     ViewData["Title"] = "Yeni Kullanıcı Kaydı";
+    // Eğer URL PublicRegister ise, kayıt formu action'ını PublicRegister olarak ayarla
+    string formAction = ViewContext.RouteData.Values["action"].ToString() == "PublicRegister" ? "PublicRegister" : "Register";
+    bool isPublicRegister = formAction == "PublicRegister";
 }
 
-<div class="container mt-4">
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h2>@ViewData["Title"]</h2>
-        </div>
-        <div class="card-body">
-            <form asp-action="Register" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group mb-3">
-                            <label asp-for="FirstName" class="form-label"></label>
-                            <input asp-for="FirstName" class="form-control" />
-                            <span asp-validation-for="FirstName" class="text-danger"></span>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group mb-3">
-                            <label asp-for="LastName" class="form-label"></label>
-                            <input asp-for="LastName" class="form-control" />
-                            <span asp-validation-for="LastName" class="text-danger"></span>
-                        </div>
-                    </div>
+<div class="container-fluid mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow-lg border-success register-card">
+                <div class="card-header bg-success text-white">
+                    <h2 class="mb-0"><i class="bi bi-person-plus-fill"></i> @ViewData["Title"]</h2>
+                    <p class="mb-0 mt-2">Kooperatif Satış Sistemine kayıt olmak için aşağıdaki formu doldurun</p>
                 </div>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group mb-3">
-                            <label asp-for="Email" class="form-label"></label>
-                            <input asp-for="Email" class="form-control" />
-                            <span asp-validation-for="Email" class="text-danger"></span>
+                <div class="card-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle-fill me-2"></i> Kayıt olarak, kooperatif satış ve stok takip sistemimizdeki tüm özelliklere erişim sağlayabilirsiniz.
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary btn-lg">
+                                <i class="bi bi-box-arrow-in-right"></i> Giriş Sayfasına Git
+                            </a>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group mb-3">
-                            <label asp-for="PhoneNumber" class="form-label"></label>
-                            <input asp-for="PhoneNumber" class="form-control" />
-                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    
+                    <form asp-action="@formAction" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger alert alert-danger mb-4"></div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 input-group-lg">
+                                    <input asp-for="FirstName" class="form-control input-field" placeholder="Ad" />
+                                    <label asp-for="FirstName" class="form-label"><i class="bi bi-person me-1"></i> Adınız</label>
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 input-group-lg">
+                                    <input asp-for="LastName" class="form-control input-field" placeholder="Soyad" />
+                                    <label asp-for="LastName" class="form-label"><i class="bi bi-person me-1"></i> Soyadınız</label>
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="form-group mb-3">
-                    <label asp-for="EmployeePosition" class="form-label"></label>
-                    <input asp-for="EmployeePosition" class="form-control" />
-                    <span asp-validation-for="EmployeePosition" class="text-danger"></span>
-                </div>
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group mb-3">
-                            <label asp-for="Password" class="form-label"></label>
-                            <input asp-for="Password" class="form-control" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 input-group-lg">
+                                    <input asp-for="Email" class="form-control input-field" placeholder="E-posta" autocomplete="username" />
+                                    <label asp-for="Email" class="form-label"><i class="bi bi-envelope me-1"></i> E-posta Adresiniz</label>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 input-group-lg">
+                                    <input asp-for="PhoneNumber" class="form-control input-field" placeholder="Telefon" />
+                                    <label asp-for="PhoneNumber" class="form-label"><i class="bi bi-telephone me-1"></i> Telefon Numaranız</label>
+                                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group mb-3">
-                            <label asp-for="ConfirmPassword" class="form-label"></label>
-                            <input asp-for="ConfirmPassword" class="form-control" />
-                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        
+                        <div class="form-floating mb-4 input-group-lg">
+                            <input asp-for="EmployeePosition" class="form-control input-field" placeholder="Pozisyon" />
+                            <label asp-for="EmployeePosition" class="form-label"><i class="bi bi-briefcase me-1"></i> Pozisyonunuz</label>
+                            <span asp-validation-for="EmployeePosition" class="text-danger"></span>
                         </div>
-                    </div>
-                </div>
-                
-                <div class="form-group mb-3">
-                    <label asp-for="SelectedRole" class="form-label"></label>
-                    <select asp-for="SelectedRole" class="form-select">
-                        <option value="">-- Rol Seçiniz --</option>
-                        @foreach (var role in ViewBag.Roles)
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 input-group-lg">
+                                    <input asp-for="Password" class="form-control input-field" placeholder="Şifre" autocomplete="new-password" />
+                                    <label asp-for="Password" class="form-label"><i class="bi bi-lock me-1"></i> Şifreniz</label>
+                                    <span asp-validation-for="Password" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3 input-group-lg">
+                                    <input asp-for="ConfirmPassword" class="form-control input-field" placeholder="Şifre (Tekrar)" autocomplete="new-password" />
+                                    <label asp-for="ConfirmPassword" class="form-label"><i class="bi bi-lock-fill me-1"></i> Şifre Tekrarı</label>
+                                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        @if (!isPublicRegister)
                         {
-                            <option value="@role.Name">@role.Name</option>
+                            <div class="form-floating mb-4 input-group-lg">
+                                <select asp-for="SelectedRole" class="form-select input-field" asp-items="@(new SelectList(ViewBag.Roles, "Name", "Name"))">
+                                    <option value="">-- Rol Seçin --</option>
+                                </select>
+                                <label asp-for="SelectedRole" class="form-label"><i class="bi bi-person-badge me-1"></i> Kullanıcı Rolü</label>
+                                <span asp-validation-for="SelectedRole" class="text-danger"></span>
+                            </div>
                         }
-                    </select>
-                    <span asp-validation-for="SelectedRole" class="text-danger"></span>
+                        else
+                        {
+                            <input type="hidden" asp-for="SelectedRole" value="User" />
+                        }
+                        
+                        <div class="form-group mt-4 d-flex justify-content-between">
+                            @if (!isPublicRegister)
+                            {
+                                <a asp-action="UserList" class="btn btn-secondary btn-lg">
+                                    <i class="bi bi-arrow-left"></i> Listeye Dön
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-controller="Home" asp-action="Index" class="btn btn-secondary btn-lg">
+                                    <i class="bi bi-arrow-left"></i> Anasayfaya Dön
+                                </a>
+                            }
+                            <button type="submit" class="btn btn-success btn-lg register-button">
+                                <i class="bi bi-person-check"></i> Kayıt Ol
+                            </button>
+                        </div>
+                    </form>
                 </div>
-                
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Kaydet</button>
-                    <a asp-action="UserList" class="btn btn-secondary">İptal</a>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>

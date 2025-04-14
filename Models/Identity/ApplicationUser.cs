@@ -9,7 +9,7 @@ namespace KoopSatis.Models.Identity
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public string ProfilePictureUrl { get; set; }
+        public string? ProfilePictureUrl { get; set; }
         public string EmployeePosition { get; set; }
         public bool IsActive { get; set; } = true;
         

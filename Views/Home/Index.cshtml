@@ -34,6 +34,32 @@
                         </div>
                     </div>
                 </div>
+                
+                @inject Microsoft.AspNetCore.Identity.SignInManager<KoopSatis.Models.Identity.ApplicationUser> SignInManager
+                @if (!SignInManager.IsSignedIn(User))
+                {
+                    <div class="row mt-4">
+                        <div class="col-md-8 offset-md-2">
+                            <div class="card border-success shadow-lg animated-card">
+                                <div class="card-header bg-success text-white">
+                                    <h4 class="text-center mb-0"><i class="bi bi-person-plus-fill"></i> Sisteme Katılın</h4>
+                                </div>
+                                <div class="card-body text-center">
+                                    <p class="lead">Kooperatif Satış ve Stok Takip Sistemimizi kullanmak için hemen üye olun veya giriş yapın!</p>
+                                    <div class="d-flex justify-content-center mt-4 mb-2">
+                                        <a asp-controller="Account" asp-action="Login" class="btn btn-primary btn-lg me-3 pulse-button">
+                                            <i class="bi bi-box-arrow-in-right"></i> Giriş Yap
+                                        </a>
+                                        <a asp-controller="Account" asp-action="PublicRegister" class="btn btn-success btn-lg pulse-button-success">
+                                            <i class="bi bi-person-plus"></i> Hemen Kayıt Ol
+                                        </a>
+                                    </div>
+                                    <p class="mt-3 text-muted">Kayıt olmak tamamen ücretsizdir ve sadece birkaç dakikanızı alacaktır.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>

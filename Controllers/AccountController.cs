@@ -89,13 +89,40 @@ namespace KoopSatis.Controllers
             return View();
         }
         
-        // GET: /Account/Register
+        // GET: /Account/AccessDenied
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied(string returnUrl = null)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+        
+        // GET: /Account/Register - Admin için
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public IActionResult Register()
         {
             ViewBag.Roles = _roleManager.Roles.ToList();
             return View();
+        }
+        
+        // GET: /Account/PublicRegister - Herkes için
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult PublicRegister()
+        {
+            // Varsayılan olarak sadece "User" rolünü göster
+            var roles = _roleManager.Roles.Where(r => r.Name == "User").ToList();
+            if (roles.Count == 0)
+            {
+                // Eğer User rolü yoksa, varsayılan olarak oluştur
+                _roleManager.CreateAsync(new IdentityRole("User")).Wait();
+                roles = _roleManager.Roles.Where(r => r.Name == "User").ToList();
+            }
+            
+            ViewBag.Roles = roles;
+            return View("Register"); // Aynı view'i kullan
         }
         
         // POST: /Account/Register
@@ -106,6 +133,12 @@ namespace KoopSatis.Controllers
         {
             if (ModelState.IsValid)
             {
+                // EmployeePosition boşsa varsayılan değer ata
+                if (string.IsNullOrEmpty(model.EmployeePosition))
+                {
+                    model.EmployeePosition = "Personel";
+                }
+                
                 var user = new ApplicationUser
                 {
                     UserName = model.Email,
@@ -114,7 +147,8 @@ namespace KoopSatis.Controllers
                     LastName = model.LastName,
                     EmployeePosition = model.EmployeePosition,
                     PhoneNumber = model.PhoneNumber,
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    ProfilePictureUrl = string.Empty
                 };
                 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -145,6 +179,68 @@ namespace KoopSatis.Controllers
             
             ViewBag.Roles = _roleManager.Roles.ToList();
             return View(model);
+        }
+        
+        // POST: /Account/PublicRegister
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PublicRegister(RegisterViewModel model)
+        {
+            // Güvenlik için role seçimini geçersiz kıl, her zaman "User" rolünü ata
+            model.SelectedRole = "User";
+            
+            if (ModelState.IsValid)
+            {
+                // EmployeePosition boşsa varsayılan değer ata
+                if (string.IsNullOrEmpty(model.EmployeePosition))
+                {
+                    model.EmployeePosition = "Üye";
+                }
+                
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    EmployeePosition = model.EmployeePosition,
+                    PhoneNumber = model.PhoneNumber,
+                    EmailConfirmed = true,
+                    ProfilePictureUrl = string.Empty
+                };
+                
+                var result = await _userManager.CreateAsync(user, model.Password);
+                
+                if (result.Succeeded)
+                {
+                    // Sadece User rolünü ata
+                    await _userManager.AddToRoleAsync(user, "User");
+                    
+                    // Kullanıcıyı otomatik olarak giriş yaptır
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    
+                    // Aktiviteyi kaydet
+                    await LogUserActivityAsync(
+                        user.Id,
+                        "PublicRegistration",
+                        $"Kullanıcı herkese açık kayıt ile oluşturuldu: {user.Email}",
+                        "ApplicationUser",
+                        user.Id);
+                    
+                    return RedirectToAction(nameof(HomeController.Index), "Home");
+                }
+                
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            
+            // Varsayılan olarak sadece "User" rolünü göster
+            var roles = _roleManager.Roles.Where(r => r.Name == "User").ToList();
+            ViewBag.Roles = roles;
+            return View("Register", model);
         }
         
         // GET: /Account/Logout
@@ -248,42 +344,33 @@ namespace KoopSatis.Controllers
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
-                    // Rol güncelleme
+                    // Kullanıcının rollerini güncelle
                     var userRoles = await _userManager.GetRolesAsync(user);
-                    await _userManager.RemoveFromRolesAsync(user, userRoles);
                     
-                    if (!string.IsNullOrEmpty(model.SelectedRole))
+                    if (!string.IsNullOrEmpty(model.SelectedRole) && !userRoles.Contains(model.SelectedRole))
                     {
+                        // Önce mevcut rolleri kaldır
+                        await _userManager.RemoveFromRolesAsync(user, userRoles);
+                        
+                        // Yeni rolü ekle
                         await _userManager.AddToRoleAsync(user, model.SelectedRole);
                     }
                     
-                    // Şifre değiştir (eğer şifre boş değilse)
+                    // Şifre değişikliği
                     if (!string.IsNullOrEmpty(model.NewPassword))
                     {
-                        // Şifreyi değiştir
                         var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                        var resetResult = await _userManager.ResetPasswordAsync(
-                            user, token, model.NewPassword);
-                            
-                        if (!resetResult.Succeeded)
-                        {
-                            foreach (var error in resetResult.Errors)
-                            {
-                                ModelState.AddModelError(string.Empty, error.Description);
-                            }
-                            ViewBag.Roles = _roleManager.Roles.ToList();
-                            return View(model);
-                        }
+                        await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
                     }
                     
                     // Aktiviteyi kaydet
                     await LogUserActivityAsync(
                         User.FindFirstValue(ClaimTypes.NameIdentifier),
-                        "UserUpdated",
-                        $"Kullanıcı güncellendi: {user.Email}",
+                        "UserEdited",
+                        $"Kullanıcı düzenlendi: {user.Email}",
                         "ApplicationUser",
                         user.Id);
-                        
+                    
                     return RedirectToAction(nameof(UserList));
                 }
                 
@@ -330,7 +417,7 @@ namespace KoopSatis.Controllers
             return View(model);
         }
         
-        // POST: /Account/Delete
+        // POST: /Account/Delete/id
         [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
@@ -342,12 +429,29 @@ namespace KoopSatis.Controllers
                 return NotFound();
             }
             
-            // Kullanıcı sayısını kontrol et
-            var userCount = await _userManager.Users.CountAsync();
-            if (userCount <= 1) 
+            // Kullanıcının admin olup olmadığını kontrol et
+            var isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+            var adminCount = (await _userManager.GetUsersInRoleAsync("Admin")).Count;
+            
+            // Eğer silinecek kullanıcı son admin ise, işlemi engelle
+            if (isAdmin && adminCount <= 1)
             {
-                TempData["ErrorMessage"] = "Sistemde en az bir yönetici kalmalıdır.";
-                return RedirectToAction(nameof(UserList));
+                ModelState.AddModelError(string.Empty, "Son admin kullanıcısı silinemez.");
+                
+                var userRoles = await _userManager.GetRolesAsync(user);
+                var model = new UserViewModel
+                {
+                    Id = user.Id,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    EmployeePosition = user.EmployeePosition,
+                    IsActive = user.IsActive,
+                    Roles = string.Join(", ", userRoles)
+                };
+                
+                return View(model);
             }
             
             // Aktiviteyi kaydet
@@ -357,7 +461,7 @@ namespace KoopSatis.Controllers
                 $"Kullanıcı silindi: {user.Email}",
                 "ApplicationUser",
                 user.Id);
-                
+            
             var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
             {
@@ -369,10 +473,9 @@ namespace KoopSatis.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
             
-            return View();
+            return View(user);
         }
         
-        // Kullanıcı aktivitelerini kaydetmek için yardımcı metod
         private async Task LogUserActivityAsync(
             string userId,
             string activityType,
@@ -385,11 +488,11 @@ namespace KoopSatis.Controllers
                 UserId = userId,
                 ActivityType = activityType,
                 Description = description,
-                Timestamp = DateTime.Now,
-                IpAddress = HttpContext.Connection.RemoteIpAddress.ToString(),
-                UserAgent = Request.Headers["User-Agent"].ToString(),
-                EntityName = entityName,
-                EntityId = entityId != null ? (int?)int.Parse(entityId) : null
+                Timestamp = DateTime.UtcNow,
+                IpAddress = HttpContext.Connection.RemoteIpAddress?.ToString(),
+                UserAgent = HttpContext.Request.Headers["User-Agent"].ToString(),
+                EntityName = entityName ?? string.Empty,
+                EntityId = entityId
             };
             
             _context.UserActivityLogs.Add(log);
@@ -476,7 +579,7 @@ namespace KoopSatis.Controllers
         
         [StringLength(100, ErrorMessage = "{0} en az {2} karakter uzunluğunda olmalıdır.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [Display(Name = "Yeni Şifre (boş bırakılabilir)")]
+        [Display(Name = "Yeni Şifre")]
         public string NewPassword { get; set; }
         
         [DataType(DataType.Password)]

@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace KoopSatis.Controllers
 {
-    [Authorize(Roles = "Admin,Manager")]
+    [Authorize(Roles = "Admin,Manager,User")]
     public class ProductCategoryController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -45,6 +45,7 @@ namespace KoopSatis.Controllers
         }
 
         // GET: ProductCategory/Create
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create()
         {
             return View();
@@ -53,6 +54,7 @@ namespace KoopSatis.Controllers
         // POST: ProductCategory/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,IsActive,CreatedAt,UpdatedAt")] ProductCategory productCategory)
         {
             if (ModelState.IsValid)
@@ -68,6 +70,7 @@ namespace KoopSatis.Controllers
         }
 
         // GET: ProductCategory/Edit/5
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +89,7 @@ namespace KoopSatis.Controllers
         // POST: ProductCategory/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,IsActive,CreatedAt,UpdatedAt")] ProductCategory productCategory)
         {
             if (id != productCategory.Id)
@@ -119,6 +123,7 @@ namespace KoopSatis.Controllers
         }
 
         // GET: ProductCategory/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -147,6 +152,7 @@ namespace KoopSatis.Controllers
         // POST: ProductCategory/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var productCategory = await _context.ProductCategories.FindAsync(id);

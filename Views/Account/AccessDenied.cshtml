@@ -1,0 +1,45 @@
+@{
+    ViewData["Title"] = "Erişim Reddedildi";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-danger shadow">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="mb-0"><i class="bi bi-exclamation-triangle-fill"></i> @ViewData["Title"]</h2>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-danger">
+                        <h4 class="alert-heading"><i class="bi bi-shield-lock"></i> Yetkisiz Erişim!</h4>
+                        <p>İstenilen sayfaya erişim yetkiniz bulunmamaktadır. Bu sayfa belirli kullanıcı rolleri veya izinleri gerektirmektedir.</p>
+                    </div>
+                    <p>Erişmeye çalıştığınız sayfa için gerekli izinlere sahip değilsiniz. Eğer bu sayfaya erişmeniz gerektiğini düşünüyorsanız, lütfen sistem yöneticisiyle iletişime geçin.</p>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
+                            <i class="bi bi-house"></i> Anasayfaya Dön
+                        </a>
+                        
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                                <button type="submit" class="btn btn-outline-secondary">
+                                    <i class="bi bi-box-arrow-right"></i> Çıkış Yap
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-success">
+                                <i class="bi bi-box-arrow-in-right"></i> Giriş Yap
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

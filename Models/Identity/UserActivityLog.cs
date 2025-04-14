@@ -12,7 +12,7 @@ namespace KoopSatis.Models.Identity
         public string IpAddress { get; set; }
         public string UserAgent { get; set; }
         public string EntityName { get; set; } // Hangi tablo/varlık üzerinde işlem yapıldı
-        public int? EntityId { get; set; } // İlgili varlığın Id'si
+        public string? EntityId { get; set; } // İlgili varlığın Id'si
         
         // İlişki özellikleri
         public virtual ApplicationUser User { get; set; }

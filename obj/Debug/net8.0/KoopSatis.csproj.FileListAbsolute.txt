@@ -165,3 +165,4 @@
 /Users/umutaraz/Desktop/KoopSaleDotnet/obj/Debug/net8.0/KoopSatis.pdb
 /Users/umutaraz/Desktop/KoopSaleDotnet/obj/Debug/net8.0/KoopSatis.genruntimeconfig.cache
 /Users/umutaraz/Desktop/KoopSaleDotnet/obj/Debug/net8.0/ref/KoopSatis.dll
+/Users/umutaraz/Desktop/KoopSaleDotnet/obj/Debug/net8.0/KoopSatis.sourcelink.json

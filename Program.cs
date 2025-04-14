@@ -78,7 +78,7 @@ using (var scope = app.Services.CreateScope())
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
         
         // Roller
-        string[] roleNames = { "Admin", "KooperatifÜyesi", "SatışPersoneli", "Depocu" };
+        string[] roleNames = { "Admin", "Manager", "User", "KooperatifÜyesi", "SatışPersoneli", "Depocu" };
         foreach (var roleName in roleNames)
         {
             if (!await roleManager.RoleExistsAsync(roleName))
@@ -97,7 +97,9 @@ using (var scope = app.Services.CreateScope())
                 Email = "admin@koopsatis.com",
                 FirstName = "Admin",
                 LastName = "User",
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                ProfilePictureUrl = string.Empty,
+                EmployeePosition = "Sistem Yöneticisi"
             };
             
             var result = await userManager.CreateAsync(adminUser, "Admin123!");
